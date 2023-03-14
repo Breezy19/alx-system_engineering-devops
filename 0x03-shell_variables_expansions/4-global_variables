@@ -1,2 +1,2 @@
 #!/bin/bash
-env | cut -f1 -d= | tr '\n' ' '; echo ""
+compgen -e
