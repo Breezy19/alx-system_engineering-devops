@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
-# Bash script displays all active IPv4s on machine
+#!/bin/bash
 
-ifconfig | grep "inet addr" | cut -d":" -f2 | cut -d" " -f1
+# Listen on port 98
+nc -l -p 98 -k | while IFS= read -r line; do
+    echo "$line"
+done

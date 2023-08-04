@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-# This script
-ifconfig | grep "netmask" | awk '{print $2}'
+# Bash script displays all active IPv4s on machine
+
+hostname -I | tr ' ' '\n'
