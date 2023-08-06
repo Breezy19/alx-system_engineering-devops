@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Bash script listens (-l) to port 98 on localhost via Netcat (nc)
+# Run: (terminal 0): sudo ./[filename]
+# Run: (terminal 1): telnet localhost 98
+# See: (terminal 1): Trying 127.0.0.2... ; Connected to localhost.
+# Type (terminal 1): Hey there!
+# See: (terminal 0): Hey there!
 
-# Listen on port 98
-nc -l -p 98 -k | while IFS= read -r line; do
-    echo "$line"
-done
+nc -l 98
