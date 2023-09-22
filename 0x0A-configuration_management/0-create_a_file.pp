@@ -1,7 +1,6 @@
-# Using puppet, create a file with below specifications
+# This puppet file creates a file called school in /tmp folder
 
-file {'/tmp/school':
-ensure  => 'present',
+file {'/tmp/shcool':
 mode    => '0744',
 owner   => 'www-data',
 group   => 'www-data',
