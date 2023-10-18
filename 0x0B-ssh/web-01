@@ -2,4 +2,8 @@
 # Bash script that uses ssh to connect to a server
 # private key ~/.ssh/school; user ubuntu; hot IP given 100.26.163.63
 
+eval $("ssh-agent") 
+
+ssh-add ~/.ssh/school
+
 ssh -i ~/.ssh/school ubuntu@100.26.163.63
