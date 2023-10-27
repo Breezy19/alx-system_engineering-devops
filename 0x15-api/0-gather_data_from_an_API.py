@@ -1,34 +1,40 @@
 #!/usr/bin/python3
 """
-Request from API; Return TODO list progress given employee ID
+This Python script retrieves information about a given employee's TODO list
+progress and their completed tasks from a given API endpoint. It takes an
+employee ID as a command-line argument and
+outputs the information in the specified format.
 """
 import requests
-from sys import argv
-
-
-def display():
-    """return API data"""
-    users = requests.get("http://jsonplaceholder.typicode.com/users")
-    for u in users.json():
-        if u.get('id') == int(argv[1]):
-            EMPLOYEE_NAME = (u.get('name'))
-            break
-    TOTAL_NUM_OF_TASKS = 0
-    NUMBER_OF_DONE_TASKS = 0
-    TASK_TITLE = []
-    todos = requests.get("http://jsonplaceholder.typicode.com/todos")
-    for t in todos.json():
-        if t.get('userId') == int(argv[1]):
-            TOTAL_NUM_OF_TASKS += 1
-            if t.get('completed') is True:
-                    NUMBER_OF_DONE_TASKS += 1
-                    TASK_TITLE.append(t.get('title'))
-    print("Employee {} is done with tasks({}/{}):".format(EMPLOYEE_NAME,
-                                                          NUMBER_OF_DONE_TASKS,
-                                                          TOTAL_NUM_OF_TASKS))
-    for task in TASK_TITLE:
-        print("\t {}".format(task))
-
+import sys
 
 if __name__ == "__main__":
-    display()
+    if len(sys.argv) != 2:
+        print("Usage: {} <employee_id>".format(sys.argv[0]))
+        sys.exit(1)
+
+    employee_id = sys.argv[1]
+    base_url = "https://jsonplaceholder.typicode.com"
+    user_url = "{}/users/{}".format(base_url, employee_id)
+    todo_url = "{}/todos?userId={}".format(base_url, employee_id)
+
+    try:
+        user_response = requests.get(user_url)
+        user_response.raise_for_status()
+        user_data = user_response.json()
+        employee_name = user_data.get("name")
+
+        todo_response = requests.get(todo_url)
+        todo_response.raise_for_status()
+        todo_data = todo_response.json()
+        total_tasks = len(todo_data)
+        done_tasks = sum(1 for task in todo_data if task.get("completed"))
+
+        print("Employee {} is done with tasks({}/{}):".format
+              (employee_name, done_tasks, total_tasks))
+        for task in todo_data:
+            if task.get("completed"):
+                print("\t{}".format(task.get("title")))
+    except requests.exceptions.RequestException as e:
+        print("Error:", e)
+        sys.exit(1)
